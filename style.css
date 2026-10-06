@@ -15,8 +15,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ---------- VIDEO INTRO ---------- */
-
 .scroll-video-section {
   position: relative;
   height: 2400px;
@@ -37,6 +35,8 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .scroll-hint {
@@ -63,8 +63,6 @@ body {
   line-height: 1;
   letter-spacing: 0;
 }
-
-/* ---------- COUPLE SECTION ---------- */
 
 .couple-section {
   min-height: 100vh;
@@ -132,8 +130,6 @@ body {
   letter-spacing: 3px;
 }
 
-/* ---------- DETAILS ---------- */
-
 .details-section {
   min-height: 100vh;
   padding: 110px 24px;
@@ -190,14 +186,10 @@ body {
   opacity: .5;
 }
 
-/* ---------- MOTION ---------- */
-
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition:
-    opacity .9s ease,
-    transform .9s ease;
+  transition: opacity .9s ease, transform .9s ease;
 }
 
 .reveal.visible {
@@ -206,12 +198,8 @@ body {
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translate(-50%, 0);
-  }
-  50% {
-    transform: translate(-50%, 8px);
-  }
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 8px); }
 }
 
 @media (min-width: 700px) {

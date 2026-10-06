@@ -6,63 +6,107 @@ const reveals = document.querySelectorAll(".reveal");
 let duration = 0;
 let targetTime = 0;
 let currentTime = 0;
-let animationFrame = null;
+let rafId = 0;
+let scrollRaf = 0;
+let readyToScrub = false;
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max);
 }
 
-function updateFromScroll() {
-  if (!duration || !video.duration) return;
-
+function updateTargetFromScroll() {
   const rect = section.getBoundingClientRect();
-  const scrollableDistance = section.offsetHeight - window.innerHeight;
+  const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
   const distanceScrolled = clamp(-rect.top, 0, scrollableDistance);
-
-  const progress = scrollableDistance > 0
-    ? distanceScrolled / scrollableDistance
-    : 0;
+  const progress = distanceScrolled / scrollableDistance;
 
   targetTime = progress * duration;
   hint.style.opacity = progress > 0.03 ? "0" : "1";
 }
 
-function animateVideo() {
-  currentTime += (targetTime - currentTime) * 0.18;
+function onScroll() {
+  if (!scrollRaf) {
+    scrollRaf = requestAnimationFrame(() => {
+      scrollRaf = 0;
+      updateTargetFromScroll();
+    });
+  }
+}
 
-  if (Math.abs(targetTime - currentTime) < 0.01) {
+function renderVideo() {
+  const difference = targetTime - currentTime;
+
+  // Smooth interpolation prevents mobile browsers from being flooded
+  // with seek requests during a fast swipe.
+  currentTime += difference * 0.22;
+
+  if (Math.abs(difference) < 0.015) {
     currentTime = targetTime;
   }
 
-  if (video.readyState >= 2) {
-    video.currentTime = currentTime;
+  if (readyToScrub && video.readyState >= 2) {
+    const safeTime = clamp(currentTime, 0, Math.max(duration - 0.02, 0));
+    if (Math.abs(video.currentTime - safeTime) > 0.025) {
+      video.currentTime = safeTime;
+    }
   }
 
-  animationFrame = requestAnimationFrame(animateVideo);
+  rafId = requestAnimationFrame(renderVideo);
+}
+
+function warmUpVideo() {
+  /*
+    Mobile Safari/Chrome can refuse to render frequent currentTime
+    seeks until the video decoder has started. Because the video is
+    muted and inline, this warm-up is allowed without user interaction.
+  */
+  const promise = video.play();
+
+  if (promise && typeof promise.then === "function") {
+    promise.then(() => {
+      setTimeout(() => {
+        video.pause();
+        video.currentTime = 0;
+        readyToScrub = true;
+        updateTargetFromScroll();
+      }, 180);
+    }).catch(() => {
+      // If autoplay is blocked, loadeddata/canplay still provide
+      // a usable fallback for browsers that allow seeking.
+      readyToScrub = true;
+      updateTargetFromScroll();
+    });
+  } else {
+    readyToScrub = true;
+    updateTargetFromScroll();
+  }
 }
 
 video.addEventListener("loadedmetadata", () => {
-  duration = video.duration;
+  duration = video.duration || 0;
   currentTime = 0;
   targetTime = 0;
-  video.currentTime = 0;
-
-  updateFromScroll();
-  cancelAnimationFrame(animationFrame);
-  animationFrame = requestAnimationFrame(animateVideo);
 });
 
-window.addEventListener("scroll", updateFromScroll, { passive: true });
-window.addEventListener("resize", updateFromScroll);
+video.addEventListener("loadeddata", () => {
+  warmUpVideo();
+});
+
+video.addEventListener("canplay", () => {
+  if (!readyToScrub) warmUpVideo();
+});
+
+window.addEventListener("scroll", onScroll, { passive: true });
+window.addEventListener("resize", updateTargetFromScroll, { passive: true });
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-    }
+    if (entry.isIntersecting) entry.target.classList.add("visible");
   });
 }, { threshold: 0.18 });
 
 reveals.forEach((element) => revealObserver.observe(element));
 
-video.pause();
+updateTargetFromScroll();
+cancelAnimationFrame(rafId);
+rafId = requestAnimationFrame(renderVideo);
