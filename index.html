@@ -1,68 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Sandeep & Mia — Wedding Invitation</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sandeep &amp; Mia — Wedding Invitation</title>
+<meta name="description" content="Sandeep &amp; Mia invite you to their wedding on 10 November 2026.">
+<meta name="theme-color" content="#f3c58f">
+<meta property="og:title" content="Sandeep &amp; Mia — Wedding Invitation">
+<meta property="og:image" content="poster.jpg">
+<link rel="preload" as="image" href="poster.jpg">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <section class="scroll-video-section">
-    <div class="video-stage">
-      <img id="invitationFrame" class="invitation-video" src="video-frames/frame-001.jpg" alt="Wedding invitation animation" fetchpriority="high"> 
-
-      <div class="scroll-hint" id="scrollHint">
-        <span>SCROLL</span>
-        <span class="arrow">↓</span>
-      </div>
+<section class="scroll-section" id="scrollSection">
+  <div class="stage">
+    <div class="frame-box">
+      <!-- Always-visible artwork: this is the fallback if anything below fails -->
+      <img id="poster" class="layer" src="poster.jpg" alt="Sandeep weds Mia — wedding invitation" width="540" height="432" fetchpriority="high">
+      <canvas id="canvas" class="layer" width="540" height="432" aria-hidden="true"></canvas>
     </div>
-  </section>
+    <div class="scroll-hint" id="scrollHint"><span>Scroll</span><span class="arrow">↓</span></div>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+  </div>
+</section>
 
-  <section class="couple-section">
-    <div class="couple-content">
-      <p class="eyebrow reveal">TOGETHER WITH THEIR FAMILIES</p>
+<section class="couple-section">
+  <div class="inner reveal">
+    <p class="eyebrow">Together with their families</p>
+    <div class="names"><h1>Sandeep</h1><span>&amp;</span><h1>Mia</h1></div>
+    <div class="ornament">✦</div>
+    <p class="invite-line">invite you to celebrate<br>their wedding</p>
+    <p class="date">10 November 2026</p>
+  </div>
+</section>
 
-      <div class="names reveal">
-        <h1>Sandeep</h1>
-        <span>&amp;</span>
-        <h1>Mia</h1>
-      </div>
-
-      <div class="ornament reveal">✦</div>
-
-      <p class="invite-line reveal">
-        invite you to celebrate<br>
-        their wedding
-      </p>
-
-      <p class="date reveal">10 · NOVEMBER · 2026</p>
+<section class="details-section">
+  <div class="inner reveal">
+    <p class="eyebrow">The wedding</p>
+    <h2>Join us as we<br>begin forever.</h2>
+    <div class="event">
+      <p class="event-label">Ceremony</p>
+      <p class="event-date">10 November 2026</p>
+      <p class="event-time">10:00 AM</p>
+      <p class="event-place">The Grand Palace<br>Kerala</p>
     </div>
-  </section>
-
-  <section class="details-section">
-    <div class="details-content">
-      <p class="eyebrow">THE WEDDING</p>
-      <h2>Join us as we<br>begin forever.</h2>
-
-      <div class="event">
-        <p class="event-label">CEREMONY</p>
-        <p class="event-date">10 November 2026</p>
-        <p class="event-time">10:00 AM</p>
-        <p class="event-place">The Grand Palace<br>Kerala</p>
-      </div>
-
-      <div class="divider">✦</div>
-
-      <div class="event">
-        <p class="event-label">RECEPTION</p>
-        <p class="event-date">10 November 2026</p>
-        <p class="event-time">6:30 PM</p>
-        <p class="event-place">The Grand Palace<br>Kerala</p>
-      </div>
+    <div class="divider">✦</div>
+    <div class="event">
+      <p class="event-label">Reception</p>
+      <p class="event-date">10 November 2026</p>
+      <p class="event-time">6:30 PM</p>
+      <p class="event-place">The Grand Palace<br>Kerala</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <script src="script.js"></script>
+<noscript><style>.scroll-section{height:auto}.stage{position:relative}.scroll-hint{display:none}</style></noscript>
+<script src="script.js"></script>
 </body>
 </html>
