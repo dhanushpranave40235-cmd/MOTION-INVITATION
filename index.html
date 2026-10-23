@@ -1,61 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Sandeep &amp; Mia — Wedding Invitation</title>
-<meta name="description" content="Sandeep &amp; Mia invite you to their wedding on 10 November 2026.">
-<meta name="theme-color" content="#f3c58f">
-<meta property="og:title" content="Sandeep &amp; Mia — Wedding Invitation">
-<meta property="og:image" content="poster.jpg">
-<link rel="preload" as="image" href="poster.jpg">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mithun Weds Swathy | 12 March 2027</title>
+  <meta name="description" content="You are invited to the wedding of Mithun and Swathy on 12 March 2027 at Nirvana Wedding Center, Palakkad.">
+  <meta name="theme-color" content="#2a1d15">
+
+  <!-- Start loading the first picture straight away -->
+  <link rel="preload" as="image" href="frames-mobile/m_frame_001.webp" media="(orientation: portrait)">
+  <link rel="preload" as="image" href="frames-desktop/frame_001.webp" media="(orientation: landscape)">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<section class="scroll-section" id="scrollSection">
-  <div class="stage">
-    <div class="frame-box">
-      <!-- Always-visible artwork: this is the fallback if anything below fails -->
-      <img id="poster" class="layer" src="poster.jpg" alt="Sandeep weds Mia — wedding invitation" width="540" height="432" fetchpriority="high">
-      <canvas id="canvas" class="layer" width="540" height="432" aria-hidden="true"></canvas>
+  <!-- 1. Scroll animation -->
+  <section class="hero" id="hero" aria-label="Wedding invitation animation">
+    <div class="stage" id="stage">
+      <canvas id="canvas" role="img" aria-label="Mithun weds Swathy, 12 March 2027. Scroll down to play the invitation."></canvas>
+      <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+        <span>Scroll</span>
+        <i></i>
+      </div>
     </div>
-    <div class="scroll-hint" id="scrollHint"><span>Scroll</span><span class="arrow">↓</span></div>
-    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-  </div>
-</section>
+  </section>
 
-<section class="couple-section">
-  <div class="inner reveal">
-    <p class="eyebrow">Together with their families</p>
-    <div class="names"><h1>Sandeep</h1><span>&amp;</span><h1>Mia</h1></div>
-    <div class="ornament">✦</div>
-    <p class="invite-line">invite you to celebrate<br>their wedding</p>
-    <p class="date">10 November 2026</p>
-  </div>
-</section>
+  <!-- 2. Details -->
+  <main class="details" id="details">
+    <picture class="flower flower--left" aria-hidden="true">
+      <source media="(min-width: 768px)" srcset="images/flower-left-desktop.svg">
+      <img src="images/flower-left-mobile.svg" alt="" loading="lazy" decoding="async">
+    </picture>
+    <picture class="flower flower--right" aria-hidden="true">
+      <source media="(min-width: 768px)" srcset="images/flower-right-desktop.svg">
+      <img src="images/flower-right-mobile.svg" alt="" loading="lazy" decoding="async">
+    </picture>
 
-<section class="details-section">
-  <div class="inner reveal">
-    <p class="eyebrow">The wedding</p>
-    <h2>Join us as we<br>begin forever.</h2>
-    <div class="event">
-      <p class="event-label">Ceremony</p>
-      <p class="event-date">10 November 2026</p>
-      <p class="event-time">10:00 AM</p>
-      <p class="event-place">The Grand Palace<br>Kerala</p>
+    <div class="details__inner">
+      <h1 class="names">
+        <img src="images/names-black.png" alt="Mithun Weds Swathy" width="809" height="680">
+      </h1>
+
+      <p class="date">12th March 2027</p>
+      <p class="time">At <strong>11 AM</strong></p>
+
+      <svg class="pin" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/>
+        <circle cx="12" cy="10" r="2.2"/>
+      </svg>
+
+      <h2 class="venue">Nirvana Wedding Center</h2>
+      <address class="address">
+        Near South Indian bank,<br>
+        Melamuri, Mercy College Jct,<br>
+        Palakkad, Keralam 678006
+      </address>
+
+      <a class="map-link" href="https://www.google.com/maps?vet=10CAAQoqAOahcKEwi43fe_hs6XAxUAAAAAHQAAAAAQFA..i&amp;sca_esv=2f9f07909ff77a7d&amp;udm&amp;fvr=1&amp;pvq=CgwvZy8xaG0yeG43MG0iEgoMd2VkZGluZyBoYWxsEAIYAw&amp;lqi=Ch1wYWxha2thZCB3ZWRkaW5nIGhhbGwgYWRkcmVzcyICSAFIk7iorsyPgIAIWiMQARACGAAiFXBhbGFra2FkIHdlZGRpbmcgaGFsbCoECAMQAZIBDXdlZGRpbmdfdmVudWU&amp;cs=0&amp;um=1&amp;ie=UTF-8&amp;fb=1&amp;gl=in&amp;sa=X&amp;ftid=0x3ba87207b1f9a863:0xa76d0fd87fc23019" target="_blank" rel="noopener">see location on your phone</a>
     </div>
-    <div class="divider">✦</div>
-    <div class="event">
-      <p class="event-label">Reception</p>
-      <p class="event-date">10 November 2026</p>
-      <p class="event-time">6:30 PM</p>
-      <p class="event-place">The Grand Palace<br>Kerala</p>
-    </div>
-  </div>
-</section>
+  </main>
 
-<noscript><style>.scroll-section{height:auto}.stage{position:relative}.scroll-hint{display:none}</style></noscript>
-<script src="script.js"></script>
+  <!-- 3. Closing picture -->
+  <footer class="closing">
+    <picture>
+      <source media="(min-width: 768px)" srcset="images/footer-desktop.jpg">
+      <img class="closing__photo" src="images/footer-mobile.jpg" alt="Mithun and Swathy in a boat at sunset. With joyful hearts, we invite you to celebrate the beginning of our forever." width="1200" height="1073" loading="lazy" decoding="async">
+    </picture>
+    <img class="closing__names" src="images/names-white.png" alt="Mithun Weds Swathy" width="1757" height="352" loading="lazy" decoding="async">
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

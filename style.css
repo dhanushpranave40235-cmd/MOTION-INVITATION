@@ -1,39 +1,250 @@
-:root{
-  --sky:#f6cf9d; --cream:#fff7ec; --ink:#3b2b3d; --gold:#b9722f; --dusk:#6a5470;
-  --serif:"Cormorant Garamond","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+/* ---------- Basics ---------- */
+:root {
+  --ink: #111;
+  --paper: #fff;
+  --dusk: #2a1d15;
+  --glow: 247, 150, 70;
+  --map-red: #d9202b;
+  --map-wave: #f09aae;
+  --serif-display: "Gilda Display", "Times New Roman", serif;
+  --serif-text: "Source Serif 4", Georgia, "Times New Roman", serif;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%}
-body{background:var(--cream);color:var(--ink);font-family:var(--serif);overflow-x:hidden}
 
-/* scroll area: 4 screens tall; the stage stays pinned while frames play */
-.scroll-section{position:relative;height:400vh;height:400svh;background:linear-gradient(#aab4cf,var(--sky) 55%,#f2a65e)}
-.stage{position:-webkit-sticky;position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.frame-box{position:relative;width:100%;max-width:min(100%,calc(100vh*1.25));max-width:min(100%,calc(100svh*1.25));aspect-ratio:5/4}
-.layer{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
-.scroll-hint{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.8rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);transition:opacity .4s}
-.scroll-hint.gone{opacity:0}
-.arrow{font-size:1.2rem;animation:bob 1.6s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(6px)}}
-.progress{position:absolute;left:0;right:0;top:0;height:3px;background:rgba(59,43,61,.12)}
-.progress i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left;transform:scaleX(0)}
+*, *::before, *::after { box-sizing: border-box; }
 
-.couple-section,.details-section{padding:18vh 24px;text-align:center}
-.couple-section{background:linear-gradient(#f2a65e,var(--cream) 40%)}
-.inner{max-width:560px;margin:0 auto}
-.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform .9s ease}
-.js .reveal.in{opacity:1;transform:none}
-.eyebrow{font-size:.85rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dusk);margin-bottom:1.6rem}
-.names{display:flex;flex-direction:column;align-items:center;gap:.1em}
-.names h1{font-size:clamp(3rem,13vw,5.2rem);font-weight:500;font-style:italic;line-height:1.05}
-.names span{font-size:1.6rem;color:var(--gold)}
-.ornament,.divider{color:var(--gold);margin:1.6rem 0;font-size:1.1rem}
-.invite-line{font-size:1.35rem;line-height:1.6}
-.date{margin-top:1.8rem;font-size:1.05rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dusk)}
-.details-section{background:var(--cream);padding-top:8vh;padding-bottom:calc(16vh + env(safe-area-inset-bottom,0px))}
-.details-section h2{font-size:clamp(2rem,8vw,2.9rem);font-weight:500;font-style:italic;line-height:1.2;margin-bottom:2.4rem}
-.event-label{font-size:.85rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
-.event-date{font-size:1.25rem}
-.event-time{font-size:1.25rem;margin:.2rem 0 .8rem}
-.event-place{font-size:1.1rem;line-height:1.5;color:var(--dusk)}
-@media (prefers-reduced-motion:reduce){.arrow{animation:none}.js .reveal{transition:none}}
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--dusk);
+  color: var(--ink);
+  font-family: var(--serif-text);
+}
+
+img { max-width: 100%; }
+
+/* ---------- 1. Scroll animation ----------
+   The tall .hero gives the page room to scroll.
+   Make the vh number bigger for a slower animation. */
+.hero {
+  position: relative;
+  height: 650vh;
+}
+
+@media (orientation: portrait) {
+  .hero { height: 520vh; }
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  /* This picture shows until the canvas draws, so the screen is never black */
+  background: var(--dusk) url("frames-desktop/frame_001.webp") center / cover no-repeat;
+}
+
+@media (orientation: portrait) {
+  .stage { background-image: url("frames-mobile/m_frame_001.webp"); }
+}
+
+.stage canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: #fff;
+  font: 400 0.8rem/1 var(--serif-text);
+  letter-spacing: 0.22em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.scroll-cue i {
+  width: 1px;
+  height: 38px;
+  background: linear-gradient(#fff, rgba(255, 255, 255, 0));
+  transform-origin: top;
+  animation: cue 1.8s ease-in-out infinite;
+}
+
+.scroll-cue.is-hidden { opacity: 0; }
+
+@keyframes cue {
+  0%   { transform: scaleY(0); opacity: 1; }
+  60%  { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+/* ---------- 2. Details ---------- */
+.details {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--paper);
+  padding: clamp(110px, 24vw, 190px) 24px clamp(80px, 16vw, 150px);
+}
+
+/* The orange glow between the animation and the white page */
+.details::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: clamp(110px, 20vw, 230px);
+  background: radial-gradient(
+    ellipse 62% 100% at 50% 0%,
+    rgba(var(--glow), 0.95) 0%,
+    rgba(var(--glow), 0.55) 38%,
+    rgba(var(--glow), 0) 100%
+  );
+  z-index: -1;
+}
+
+.flower {
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  display: block;
+}
+
+.flower img { display: block; width: 100%; height: auto; }
+
+/* Mobile flowers */
+.flower--left  { left: 0;  bottom: 6%; width: min(46vw, 230px); }
+.flower--right { right: 0; top: 17%;   width: min(34vw, 190px); }
+
+.details__inner {
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.names { margin: 0 0 clamp(26px, 6vw, 44px); line-height: 0; }
+.names img { width: clamp(150px, 42vw, 300px); height: auto; }
+
+.date {
+  margin: 0;
+  font-family: var(--serif-display);
+  font-size: clamp(0.95rem, 3.6vw, 1.3rem);
+  letter-spacing: 0.32em;
+  /* the trailing letter-space would push the text off centre */
+  padding-left: 0.32em;
+}
+
+.time {
+  margin: clamp(18px, 4vw, 28px) 0 0;
+  font-family: var(--serif-display);
+  font-size: clamp(1rem, 4vw, 1.35rem);
+  letter-spacing: 0.08em;
+}
+
+.time strong { font-weight: 400; letter-spacing: 0.14em; }
+
+.pin {
+  margin-top: clamp(30px, 7vw, 52px);
+  color: var(--ink);
+}
+
+.venue {
+  margin: 14px 0 8px;
+  font: 600 clamp(0.95rem, 3.4vw, 1.1rem)/1.3 var(--serif-text);
+}
+
+.address {
+  font-style: normal;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  line-height: 1.65;
+}
+
+.map-link {
+  margin-top: 18px;
+  padding: 6px 4px;
+  color: var(--map-red);
+  font: 400 clamp(0.8rem, 2.8vw, 0.95rem)/1.2 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  text-decoration: underline wavy var(--map-wave);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+}
+
+.map-link:hover { color: #a8131c; }
+
+.map-link:focus-visible {
+  outline: 2px solid var(--map-red);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* ---------- 3. Closing picture ---------- */
+.closing {
+  position: relative;
+  background: var(--dusk);
+  line-height: 0;
+}
+
+.closing__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* soft shade so the white names stay readable on the water */
+.closing::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 45%;
+  background: linear-gradient(to top, rgba(18, 12, 8, 0.6), rgba(18, 12, 8, 0));
+  pointer-events: none;
+}
+
+.closing__names {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(18px, 6vw, 52px));
+  transform: translateX(-50%);
+  width: min(78vw, 760px);
+  height: auto;
+}
+
+/* ---------- Desktop ---------- */
+@media (min-width: 768px) {
+  .details { padding: 190px 40px 160px; }
+
+  .flower--left  { left: 0;  top: auto; bottom: 0; width: min(30vw, 440px); }
+  .flower--right { right: 0; top: 0;    bottom: auto; width: min(34vw, 500px); }
+
+  .details__inner { max-width: 640px; }
+  .names img { width: 360px; }
+  .date  { font-size: 1.35rem; }
+  .time  { font-size: 1.3rem; }
+  .venue { font-size: 1.15rem; }
+  .address { font-size: 1.05rem; }
+  .map-link { font-size: 1rem; }
+
+  .closing__names { width: min(52vw, 780px); }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue i { animation: none; }
+  .scroll-cue { transition: none; }
+}
